@@ -5,7 +5,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 try:
-    conn = MongoClient("mongodb+srv://altcointraders:rrxRhjvyUEPltaGC@at.u2irqhk.mongodb.net")
+    conn = MongoClient("net")
     print("Connected successfully!!!")
 except:  
     print("Could not connect to MongoDB")
