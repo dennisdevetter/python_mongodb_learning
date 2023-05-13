@@ -1,10 +1,12 @@
 import pymongo
 import json
 import os
+import time
 
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from dotenv import load_dotenv
+from motor.motor_asyncio import AsyncIOMotorClient
 
 load_dotenv()  # Load the .env file
 connection_string = os.getenv("CONNECTION_STRING")
@@ -78,8 +80,8 @@ mylist= [
 # print(x.inserted_ids)
 
 # Return first item
-x = customers.find_one()
-print(x)
+# x = customers.find_one()
+# print(x)
 
 # Return all items
 # for x in customers.find():
@@ -95,13 +97,20 @@ print(x)
 
 # Find documents where the address starts with the letter "S" or higher:
 myquery = { "address": { "$gt": "S" } }
-mydoc = customers.find(myquery)
+#mydoc = customers.find(myquery)
 
 # for x in mydoc:
 #   print(x)
 
 # Sort the result alphabetically by name:
-mydoc = customers.find().sort("name", 1)
+# mydoc = customers.find().sort("{address: 1}")
+# mydoc = customers.find().sort("address")
 
+# for x in mydoc:
+#   print(x)
+
+
+# mydoc = customers.find().sort("address", -1)
+mydoc = customers.find().sort("name",1)
 for x in mydoc:
   print(x)
