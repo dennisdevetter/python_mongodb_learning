@@ -1,11 +1,16 @@
 import pymongo
 import json
+import os
 
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+from dotenv import load_dotenv
+
+load_dotenv()  # Load the .env file
+connection_string = os.getenv("CONNECTION_STRING")
 
 try:
-    conn = MongoClient("net")
+    conn = MongoClient(connection_string)
     print("Connected successfully!!!")
 except:  
     print("Could not connect to MongoDB")
@@ -24,6 +29,8 @@ db = conn.learning
 # if "document" in collectionNames:
 #   print("The collection exists.")
 
+
+# documents collection
 documents=db.document
 
 doc= {
@@ -37,6 +44,16 @@ try:
     documents.insert_one(doc)
 except pymongo.errors.DuplicateKeyError :    
     print('document already exists')
+
+# for db in documents.find({'title': 'MongoDB and Python'}):
+#     print(db)
+
+# for doc in documents.find():
+#     print(doc['_id'])
+
+
+
+# customers collection
 
 customers = db.customers
 
@@ -57,13 +74,34 @@ mylist= [
   { "_id": 14, "name": "Viola", "address": "Sideway 1633"}
 ]
 
-x = customers.insert_many(mylist)
-print(x.inserted_ids)
+# x = customers.insert_many(mylist)
+# print(x.inserted_ids)
 
+# Return first item
+x = customers.find_one()
+print(x)
 
-# for db in documents.find({'title': 'MongoDB and Python'}):
-#     print(db)
+# Return all items
+# for x in customers.find():
+#   print(x)
 
-# for doc in documents.find():
-#     print(doc['_id'])
+# Return only the names and addresses, not the _ids:
+# for x in customers.find({},{ "_id": 0, "name": 1, "address": 1 }):
+#     print(x)
 
+# Exclude address
+# for x in customers.find({},{ "address": 0 }):
+#   print(x)
+
+# Find documents where the address starts with the letter "S" or higher:
+myquery = { "address": { "$gt": "S" } }
+mydoc = customers.find(myquery)
+
+# for x in mydoc:
+#   print(x)
+
+# Sort the result alphabetically by name:
+mydoc = customers.find().sort("name", 1)
+
+for x in mydoc:
+  print(x)
